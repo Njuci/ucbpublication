@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'djoser',
     'rest_framework',
     'knox',
-    'accounts',
     'drf_yasg',
     'django_filters',
     'rest_framework.authtoken',
