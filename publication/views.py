@@ -10,6 +10,17 @@ from rest_framework import status
 from rest_framework.response import Response
 from .email_sending import envoi_email
 from datetime import datetime
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+
+def is_valid_email(email):
+    try:
+        validate_email(email)
+        return True
+    except ValidationError:
+        return False
+
+
 class chif:
     def chiffrementcsv(self,file):
         dictionnaire=csv.DictReader(open(file,'r'))
@@ -91,7 +102,8 @@ class uploandingCsvfile(CreateAPIView):
 def Email_envoie(request, email,*args, **kwargs):
     """ This view help to create and account for testing sending mails."""
     cxt = {}
-    if request.method == "POST":
+    cxt = {'msg':'email envoie echoue.'}
+    if request.method == "POST" and is_valid_email(email=email):
         email = email
 
         subjet = "Test Email"
