@@ -6,10 +6,10 @@ import csv
 from rest_framework.permissions import AllowAny
 from rest_framework.generics import CreateAPIView
 from rest_framework.decorators import api_view
-
+from rest_framework import status
 from rest_framework.response import Response
 from .email_sending import envoi_email
-import datetime
+from datetime import datetime
 class chif:
     def chiffrementcsv(self,file):
         dictionnaire=csv.DictReader(open(file,'r'))
@@ -87,11 +87,12 @@ class uploandingCsvfile(CreateAPIView):
             return Response(a)
         else:
             return Response(serializer.errors)
-def Email_envoie(request, *args, **kwargs):
+@api_view(['POST'])
+def Email_envoie(request, email,*args, **kwargs):
     """ This view help to create and account for testing sending mails."""
     cxt = {}
     if request.method == "POST":
-        email = request.POST.get('email')
+        email = email
 
         subjet = "Test Email"
         template = 'email.html'
@@ -113,5 +114,6 @@ def Email_envoie(request, *args, **kwargs):
            cxt =  {"msg":"mail envoyee avec success."}
         else:
             cxt = {'msg':'email envoie echoue.'}
+        print(has_send)
 
-    return render(request, 'index.html', cxt)       
+    return Response(cxt,status=status.HTTP_200_OK)       
