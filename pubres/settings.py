@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'knox',
     'drf_yasg',
+    'rest_framework_swagger',
     'django_filters',
     'rest_framework.authtoken',
     'corsheaders',
@@ -138,3 +139,8 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL='/media/'
 MEDIA_ROOT=BASE_DIR/'media/'
+REST_FRAMEWORK = {
+
+    'DFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+
+}
