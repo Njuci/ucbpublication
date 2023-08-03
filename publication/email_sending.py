@@ -11,7 +11,7 @@ def envoi_email(sujet: str,desti : list, template :str, context:dict):
         msg= render_to_string(template,context)
         
         send_mail(
-            sujet,
+            sujet, 
             msg,
             settings.EMAIL_HOST_USER,
             desti,

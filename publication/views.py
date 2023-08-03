@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .serializers import fileserial
+from .serializers import fileserial,ContexteSerial
 from .models import FichierCsv
 from django.conf import settings
 import csv
@@ -98,34 +98,53 @@ class uploandingCsvfile(CreateAPIView):
             return Response(a)
         else:
             return Response(serializer.errors)
-@api_view(['POST'])
-def Email_envoie(request, email,*args, **kwargs):
-    """ This view help to create and account for testing sending mails."""
-    cxt = {}
-    cxt = {'msg':'email envoie echoue.'}
-    if request.method == "POST" and is_valid_email(email=email):
-        email = email
+class Email_envoie(APIView):
+    def post(self,request):
+        """ This view help to create and account for testing sending mails."""
+        cxt = {}
+        print(ContexteSerial)
+        cxt = {'msg':'email envoie echoue.'}
+        serializer=ContexteSerial(data=request.data)
+        serializer.is_valid()
+        mesdonne=request.data
+        print(mesdonne)
 
-        subjet = "Test Email"
-        template = 'email.html'
-        context = {
-            'date': datetime.today().date,
-            'email': email
-        }
+        email=mesdonne.get('email')
+        nom=mesdonne.get('nom')
+        total=mesdonne.get('total')
+        mention=mesdonne['mention']
+        moyenne=mesdonne['moyenne']
+        nombreCredit=mesdonne['nombreCredit']
+        cours=mesdonne['cours']
+        
+        if request.method == "POST" and is_valid_email(email=email) and serializer.is_valid():
+            email = email
 
-        receivers = [email]
+            subjet = "Test Email"
+            template = 'index.html'
+            context = {
+                'date': datetime.today().date,
+                'email': email,
+                'nom':nom,
+                'total':total,
+                'mention':mention,
+                'moyenne':moyenne,
+                'nombreCredit':nombreCredit,
+                'cours':cours
+            }
 
-        has_send = envoi_email(
-            sujet=subjet,
-            desti=receivers,
-            template=template,
-            context=context
-            )
+            receivers = [email]
+
+            has_send = envoi_email(
+                sujet=subjet,
+                desti=receivers,
+                template=template,
+                context=context
+                )
 
         if has_send:
-           cxt =  {"msg":"mail envoyee avec success."}
+            cxt =  {"msg":"mail envoyee avec success."}
         else:
             cxt = {'msg':'email envoie echoue.'}
         print(has_send)
-
-    return Response(cxt,status=status.HTTP_200_OK)       
+        return Response(cxt,status=status.HTTP_200_OK)       

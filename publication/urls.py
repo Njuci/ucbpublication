@@ -7,6 +7,6 @@ urlpatterns = [
     path('get/', getfichier),
     path('getFic/<str:id>',get_fichierUploader),
     path('uploadfile',uploandingCsvfile.as_view()),
-    path('email/<str:email>',Email_envoie,name='email_envoie'),
+    path('email',Email_envoie.as_view(),name='email_envoie'),
     path('up',MyView.as_view())
 ]
