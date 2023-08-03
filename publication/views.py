@@ -148,3 +148,59 @@ class Email_envoie(APIView):
             cxt = {'msg':'email envoie echoue.'}
         print(has_send)
         return Response(cxt,status=status.HTTP_200_OK)       
+
+class Email_envoie3(APIView):
+    def post(self,request):
+        """ This view help to create and account for testing sending mails."""
+        cxt = {}
+        print(ContexteSerial)
+        cxt = {'msg':'email envoie echoue.'}
+        nombreEchec=0
+        for element in request.data:
+            serializer=ContexteSerial(data=element)
+            serializer.is_valid()
+            mesdonne=element
+            print(mesdonne)
+
+            email=mesdonne['email']
+            nom=mesdonne['nom']
+            total=mesdonne['total']
+            mention=mesdonne['mention']
+            moyenne=mesdonne['moyenne']
+            nombreCredit=mesdonne['nombreCredit']
+            cours=mesdonne['cours']
+            
+            if request.method == "POST" and is_valid_email(email=email) and serializer.is_valid():
+                email = email
+
+                subjet = "Test Email"
+                template = 'index.html'
+                context = {
+                    'date': datetime.today().date,
+                    'email': email,
+                    'nom':nom,
+                    'total':total,
+                    'mention':mention,
+                    'moyenne':moyenne,
+                    'nombreCredit':nombreCredit,
+                    'cours':cours
+                }
+
+                receivers = [email]
+
+                has_send = envoi_email(
+                    sujet=subjet,
+                    desti=receivers,
+                    template=template,
+                    context=context
+                    )
+                if has_send:
+                    cxt =  {"msg":"mail envoyee avec success."}
+                else:
+                    cxt = {'msg':'email envoie echoue.'}
+            else:
+                nombreEchec=nombreEchec+1
+
+        message={'messages nonenvoye':nombreEchec}
+            
+        return Response(message,status=status.HTTP_200_OK)       
