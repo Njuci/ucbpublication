@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'knox',
     'drf_yasg',
+    'rest_framework_swagger',
     'django_filters',
     'rest_framework.authtoken',
     'corsheaders',
