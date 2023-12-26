@@ -23,9 +23,8 @@ def is_valid_email(email):
 
 class chif:
     def chiffrementcsv(self,file):
-        dictionnaire=csv.DictReader(open(file,'r'))
+        dictionnaire=csv.DictReader(open(file,'r'),delimiter=';')
         dict1 = [dict(ligne) for ligne in dictionnaire ] 
-        print(dict1)
         return dict1
 def chiffrementrafine(c):
     f=[]
@@ -39,10 +38,7 @@ def chiffrementrafine(c):
         dictio['nombreCredit']=c[i].get('nombreCredit')
         cours=[]
         for a in c[i].keys():
-            if a  in dictio.keys():
-                print('')
-            else:
-                print(a)
+            if not a  in dictio.keys():
                 fg={}
                 fg[a]=c[i].get(a)
                 cours.append(fg)
