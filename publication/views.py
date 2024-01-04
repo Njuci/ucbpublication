@@ -147,6 +147,7 @@ class Email_envoie(APIView):
 
 class Email_envoie3(APIView):
     def post(self,request):
+        print(request.data)
         """ This view help to create and account for testing sending mails."""
         cxt = {}
         print(ContexteSerial)
