@@ -73,7 +73,7 @@ def get_fichierUploader(request,id):
     fichier=FichierCsv.objects.get(id=id)
     fichierseriial=fileserial(fichier)
     nom=fichier.fichier.path
-    print(nom)
+   
     ouver=chif()
     dt=ouver.chiffrementcsv(nom)
     dictr=[dt,nom]
