@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
 from pathlib import Path
-
+import datetime
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'django_filters',
     'rest_framework.authtoken',
     'corsheaders',
-    'publication'
+    'publication',
+    'comptes'
 ]
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',             
@@ -86,13 +87,24 @@ WSGI_APPLICATION = 'pubres.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'publication_resultat',
+        'USER': 'root',
+        'PASSWORD': '3670njci',        
+        'HOST': 'localhost',
+        'PORT': '3306', 
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -126,6 +138,8 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_ROOT=os.path.join(BASE_DIR,"static")
+
+AUTH_USER_MODEL='comptes.MyUser'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
@@ -142,6 +156,19 @@ REST_FRAMEWORK = {
     'DFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 
 }
+
+from rest_framework_jwt.settings import api_settings
+
+JWT_AUTH = {
+    'JWT_SECRET_KEY': 'votre-cle-secrete',
+    'JWT_ALGORITHM': 'HS256',
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
+    'JWT_ALLOW_REFRESH': True,
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
+    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
+    'JWT_USER_PAYLOAD_HANDLER': 'comptes.handle.jwt_user_payload_handler',
+}
+
 
 EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
 
